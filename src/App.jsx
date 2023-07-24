@@ -4,7 +4,7 @@ import { FaChevronRight } from 'react-icons/fa';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { useDimensions } from './hooks/useDimensions';
 import './index.css';
-const apiKey = import.meta.env.VITE_API_KEY;
+
 export default function App() {
     const { height } = useDimensions();
     const [ip, setIp] = useState('8.8.8.8');
@@ -19,7 +19,7 @@ export default function App() {
         if (ip && validateIPaddress(ip)) {
            
             const getData = async () => {
-                let result = (await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&ipAddress=${ip}`));
+                let result = (await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=at_ZMqgUxo4VdoTAk1iLJfoY0qhtcPcZ&ipAddress=${ip}`));
                 
                 let res = await result.json();
     
