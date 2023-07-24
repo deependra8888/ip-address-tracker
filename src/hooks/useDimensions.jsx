@@ -25,25 +25,25 @@ export function useDimensions() {
         return () => window.removeEventListener('resize', handleWindowResize);
     }, []);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setBodyHeight(
-                Math.max(
-                    document?.body?.scrollHeight,
-                    document?.body?.offsetHeight,
-                    document?.documentElement?.clientHeight,
-                    document?.documentElement?.scrollHeight,
-                    document?.documentElement?.offsetHeight
-                )
-            );
-        };
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         setBodyHeight(
+    //             Math.max(
+    //                 document?.body?.scrollHeight,
+    //                 document?.body?.offsetHeight,
+    //                 document?.documentElement?.clientHeight,
+    //                 document?.documentElement?.scrollHeight,
+    //                 document?.documentElement?.offsetHeight
+    //             )
+    //         );
+    //     };
 
-        document.addEventListener('scroll', handleScroll);
+    //     document.addEventListener('scroll', handleScroll);
 
-        return () => {
-            document.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+    //     return () => {
+    //         document.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, []);
 
     return { width, height, bodyHeight };
 }

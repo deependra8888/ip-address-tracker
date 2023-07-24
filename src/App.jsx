@@ -4,52 +4,35 @@ import { FaChevronRight } from 'react-icons/fa';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { useDimensions } from './hooks/useDimensions';
 import './index.css';
-
-// const defaultData = {
-//     status: 'success',
-//     country: 'United States',
-//     countryCode: 'US',
-//     region: 'CA',
-//     regionName: 'California',
-//     city: 'Rosemead',
-//     zip: '91770',
-//     lat: 34.0648,
-//     lon: -118.086,
-//     timezone: 'America/Los_Angeles',
-//     isp: 'Southern California Edison',
-//     org: 'Southern California Edison',
-//     as: 'AS7127 Southern California Edison',
-//     query: '192.212.174.101',
-// };
-
+const apiKey = import.meta.env.VITE_API_KEY;
 export default function App() {
     const { height } = useDimensions();
-
-    const [ip, setIp] = useState();
+    const [ip, setIp] = useState('8.8.8.8');
     const [data, setData] = useState();
     const [position, setPosition] = useState();
-
     useEffect(() => {
-        if (data && data?.status === 'success') {
-            console.log(data);
-            setPosition([data.lat, data.lon]);
-        }
-    }, [data]);
+      search()
+    }, []);
 
+   
     function search() {
         if (ip && validateIPaddress(ip)) {
-            console.log('searching for ip: ', ip);
-            fetch(`http://ip-api.com/json/${ip}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data?.status === 'success') {
-                        setData(data);
-                    } else {
-                        alert(`${data.status}: ${data.message}`);
-                    }
-                });
+           
+            const getData = async () => {
+                let result = (await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&ipAddress=${ip}`));
+                
+                let res = await result.json();
+    
+                setData(res);
+                console.log(res);
+                setPosition([res.location.lat, res.location.lng])
+            }
+
+            getData()
         }
+        
     }
+   
     function validateIPaddress(ip) {
         if (
             /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
@@ -85,19 +68,19 @@ export default function App() {
                 {position && data && (
                     <div>
                         <p className='info-title'>IP ADDRESS</p>
-                        <p className='info-data'>{data.query}</p>
+                        <p className='info-data'>{data.ip}</p>
                     </div>
                 )}
                 {position && data && (
                     <div>
                         <p className='info-title'>LOCATION</p>
-                        <p className='info-data'>{`${data.city}, ${data.region}, ${data.country}`}</p>
+                        <p className='info-data'>{`${data.location.city}, ${data.location.region}, ${data.location.country}`}</p>
                     </div>
                 )}
                 {position && data && (
                     <div>
                         <p className='info-title'>TIMEZONE</p>
-                        <p className='info-data'>{data.timezone}</p>
+                        <p className='info-data'>{data.location.timezone}</p>
                     </div>
                 )}
                 {position && data && (
